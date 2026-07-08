@@ -4,7 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EverEcho AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --bg-dark: #050505;
+        --bg-cream: #ffedc5;
+        --color-primary: #d4af37;
+      }
+
       * {
         box-sizing: border-box;
         margin: 0;
@@ -14,69 +23,385 @@
       html,
       body {
         height: 100%;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
       }
 
       body {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-        background: #000;
-        color: #b8b8b8;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-          "Microsoft YaHei", sans-serif;
+        background: var(--bg-dark);
+        color: #fff;
+        font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "PingFang SC", "Microsoft YaHei", sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
 
       main {
-        flex: 1;
+        flex: none;
+        overflow: hidden;
+        background: var(--bg-cream);
+      }
+
+      /* Animations */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateX(var(--tx, 0)) translateY(0px);
+        }
+        50% {
+          transform: translateX(var(--tx, 0)) translateY(-24px);
+        }
+      }
+
+      @keyframes imageReveal {
+        from {
+          opacity: 0;
+          transform: translateX(var(--tx, 0)) scale(0.95);
+        }
+        to {
+          opacity: var(--img-opacity, 1);
+          transform: translateX(var(--tx, 0)) scale(1);
+        }
+      }
+
+      .hero {
+        position: relative;
+        width: 100%;
+        min-height: 862px;
+        background: linear-gradient(
+          180deg,
+          #050505 0%,
+          #1a1410 35%,
+          #5c452b 75%,
+          #ffedc5 100%
+        );
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: -20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
+        pointer-events: none;
+      }
+
+      .hero-image {
+        position: absolute;
+        width: 1536px;
+        height: 865px;
+        left: calc(50% - 776px);
+        top: 67px;
+        object-fit: contain;
+        pointer-events: none;
+        user-select: none;
+        --tx: 0px;
+        --img-opacity: 1;
+        opacity: 0;
+        animation: imageReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards,
+                   float 7s ease-in-out 1.7s infinite;
+      }
+
+      .hero-content {
+        position: absolute;
+        left: max(32px, calc(50% - 614px));
+        top: 254px;
+        z-index: 1;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 48px 24px;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 675px;
+        gap: 32px;
       }
 
       h1 {
-        color: #e8e8e8;
-        font-size: clamp(1.5rem, 4vw, 2.25rem);
+        width: 620px;
+        color: #fff;
+        font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+        font-size: 80px;
+        font-weight: 500;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        opacity: 0;
+        animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .subheadline {
+        width: 560px;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 1.6;
+        opacity: 0;
+        animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+      }
+
+      .primary-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
+        min-height: 54px;
+        padding: 16px 28px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        font-size: 16px;
         font-weight: 500;
         letter-spacing: 0.02em;
-        text-align: center;
+        text-decoration: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0;
+        animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+      }
+
+      .primary-button:hover {
+        background: #fff;
+        color: #050505;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(255, 255, 255, 0.25);
+      }
+
+      .primary-button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 4px;
+      }
+
+      .app-preview {
+        padding: 96px 40px 120px;
+        background: var(--bg-cream);
+        color: #211a11;
+        position: relative;
+        z-index: 2;
+      }
+
+      .app-preview-inner {
+        width: min(1228px, 100%);
+        margin: 0 auto;
+      }
+
+      .app-preview-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 32px;
+        margin-bottom: 56px;
+      }
+
+      .app-preview h2 {
+        font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+        font-size: clamp(48px, 6vw, 76px);
+        font-weight: 600;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        color: #211a11;
+      }
+
+      .app-preview p {
+        max-width: 420px;
+        color: #5e4a2e;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.6;
+      }
+
+      .app-screens {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: start;
+        gap: 32px;
+      }
+
+      .app-screen {
+        overflow: hidden;
+        border-radius: 36px;
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 24px 64px rgba(33, 26, 17, 0.12);
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+
+      .app-screen:hover {
+        transform: translateY(-16px);
+        box-shadow: 0 40px 88px rgba(33, 26, 17, 0.2);
+      }
+
+      .app-screen:nth-child(2) {
+        margin-top: 64px;
+      }
+
+      .app-screen img {
+        display: block;
+        width: 100%;
+        height: auto;
+        transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .app-screen:hover img {
+        transform: scale(1.03);
       }
 
       footer {
-        padding: 32px 24px 40px;
+        background: var(--bg-cream);
+        padding: 32px 24px 48px;
         text-align: center;
-        font-size: 13px;
+        font-size: 14px;
         line-height: 1.9;
-        color: #9a9a9a;
+        color: #7a6341;
+        font-weight: 400;
       }
 
       footer p + p {
-        margin-top: 4px;
+        margin-top: 6px;
+      }
+
+      footer p {
+        overflow-wrap: anywhere;
       }
 
       footer a {
         color: inherit;
         text-decoration: none;
+        transition: color 0.3s ease;
       }
 
       footer a:hover {
+        color: #211a11;
         text-decoration: underline;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          min-height: 760px;
+        }
+
+        .hero-image {
+          width: 900px;
+          height: auto;
+          left: 50%;
+          top: 330px;
+          --tx: -62%;
+          --img-opacity: 0.92;
+        }
+
+        .hero-content {
+          left: 28px;
+          top: 112px;
+          width: calc(100% - 56px);
+          gap: 24px;
+        }
+
+        h1 {
+          width: 100%;
+          max-width: 100%;
+          overflow-wrap: anywhere;
+          word-break: break-word;
+          font-size: clamp(42px, 10vw, 52px);
+          line-height: 1.08;
+        }
+
+        .subheadline {
+          width: 100%;
+          max-width: 100%;
+          overflow-wrap: anywhere;
+          word-break: break-word;
+          font-size: 18px;
+          line-height: 1.6;
+        }
+
+        .app-preview {
+          padding: 72px 28px 88px;
+        }
+
+        .app-preview-header {
+          display: block;
+          margin-bottom: 40px;
+        }
+
+        .app-preview h2 {
+          margin-bottom: 16px;
+        }
+
+        .app-preview p {
+          font-size: 16px;
+        }
+
+        .app-screens {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+
+        .app-screen {
+          border-radius: 32px;
+        }
+
+        .app-screen:nth-child(2) {
+          margin-top: 0;
+        }
       }
     </style>
   </head>
   <body>
     <main>
-      <h1>这是 everechoai 落地页</h1>
+      <section class="hero" aria-label="EverEcho AI">
+        <img class="hero-image" src="./static/rings.png" alt="" />
+        <div class="hero-content">
+          <h1>EverEcho AI</h1>
+          <p class="subheadline">
+            Capture every voice, remember every moment, and turn conversations
+            into lasting insight.
+          </p>
+          <a class="primary-button" href="#app">Preview App</a>
+        </div>
+      </section>
+
+      <section class="app-preview" id="app" aria-label="App preview">
+        <div class="app-preview-inner">
+          <div class="app-preview-header">
+            <h2>Preview App</h2>
+            <p>
+              A first look at the EverEcho mobile experience, from capture to
+              memory review.
+            </p>
+          </div>
+          <div class="app-screens">
+            <figure class="app-screen">
+              <img src="./static/1.png" alt="EverEcho app screen 1" />
+            </figure>
+            <figure class="app-screen">
+              <img src="./static/2.png" alt="EverEcho app screen 2" />
+            </figure>
+            <figure class="app-screen">
+              <img src="./static/3.png" alt="EverEcho app screen 3" />
+            </figure>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <footer>
+    <footer id="contact">
       <p>
-        模型名称: 阶跃大模型&nbsp;&nbsp;沪公网安备31010402333581&nbsp;&nbsp;备案号:
-        Shanghai-JieYue-20231106&nbsp;&nbsp;沪ICP备2023019222号-3
-      </p>
-      <p>
-        Copyright © 2023 上海阶跃星辰智能科技有限公司&nbsp;&nbsp;地址:
-        上海市徐汇区云锦路701号30层
+        Copyright © 2026 深圳市原声科技有限公司&nbsp;&nbsp;地址:
+        深圳市南山区粤海街道高新区社区科技南十二路010号中电照明研发中心北座684
       </p>
     </footer>
   </body>
